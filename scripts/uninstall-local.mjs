@@ -26,5 +26,5 @@ if (existsSync(pkgPath)) {
 rmSync(target, { recursive: true, force: true })
 console.log('→ pnpm install …')
 const pnpm = process.platform === 'win32' ? 'pnpm.cmd' : 'pnpm'
-spawnSync(pnpm, ['install'], { cwd: profileDir, stdio: 'inherit', shell: process.platform === 'win32' })
+spawnSync(pnpm, ['install'], { cwd: profileDir, stdio: 'inherit' })
 console.log('✅ 已卸载，重启 DSH 生效')

@@ -59,7 +59,7 @@ writeFileSync(pkgPath, JSON.stringify(pkg, null, 2) + '\n')
 // 3. pnpm install
 console.log('→ pnpm install …')
 const pnpm = process.platform === 'win32' ? 'pnpm.cmd' : 'pnpm'
-const res = spawnSync(pnpm, ['install'], { cwd: profileDir, stdio: 'inherit', shell: process.platform === 'win32' })
+const res = spawnSync(pnpm, ['install'], { cwd: profileDir, stdio: 'inherit' })
 if (res.status !== 0) {
   console.error(`✗ pnpm install 失败（exit ${res.status}）`)
   process.exit(1)
