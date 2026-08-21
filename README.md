@@ -69,12 +69,25 @@
 - 云文档 / 表格：把应用加为文档**协作者**
 - 知识库：把应用加入知识库**成员**
 
-### 4️⃣ 加载插件（两种方式）
+### 4️⃣ 加载插件：DSH 插件的使用方式
 
-| 方式 | 说明 |
-| --- | --- |
-| **A · 动态加载**（临时） | 把 [`host.js`](host.js) / [`client.js`](client.js) 分别作为 `cordis_define` 的 `code.host` / `code.client` |
-| **B · 固化常驻**（推荐） | 见 [固化常驻](#-固化常驻--persistence)，DSH 重启后自动加载 |
+> **DSH 插件是什么**：DSH（DeepSeek Harness）的插件是 **Cordis 插件**，由两个半部组成——
+> **host 半部**（服务端：模型工具、API 调用逻辑，即 `host.js`）和 **client 半部**（浏览器：设置界面，即 `client.js`）。
+> 加载插件 = 把这两个半部定义出来并激活。
+
+**方式 A · 动态加载（最快，推荐给多数用户）**
+
+1. **让助手帮你加载**（最简单）：把本仓库地址（或 `host.js` / `client.js` 的内容）发给你的 DSH 助手，说「帮我加载这个飞书插件」。助手会调用 DSH 插件工具完成：
+   - `cordis_define`：`host.js` 内容 → `code.host`，`client.js` 内容 → `code.client`（**定义**插件）
+   - `cordis_run`：**激活**插件。因为包含浏览器界面，首次激活需要你在界面上**点批准**
+2. **手动加载**（如果你有插件管理界面/工具）：步骤同上，把 [`host.js`](host.js) / [`client.js`](client.js) 的内容分别填入 `code.host` / `code.client`，然后 `cordis_run`。
+3. **验证成功**：
+   - 模型工具列表出现 `feishu_read` / `feishu_configure`
+   - **设置 → 插件 → 插件配置** 出现「飞书」卡片
+
+> ⚠️ 动态插件是**当前进程内临时**的：DSH 重启后需重新加载（已保存的凭证不受影响）。想一劳永逸，用**方式 B**。
+
+**方式 B · 固化常驻（DSH 重启后自动加载）** —— 见下方 [固化常驻](#-固化常驻--persistence)。
 
 ### 5️⃣ 配置凭证
 
@@ -103,11 +116,16 @@
 
 ## 💾 固化常驻 / Persistence
 
+**原理**：DSH 的宿主组合由多层 `cordis.yml` 补丁组成（bundle 层 + 你的 profile 补丁层）。把插件写进 profile 的 `cordis.patch.yml`，DSH 每次启动就会自动加载它——这就是「正式安装」的方式。
+
 `lib/` 目录是**真实 Cordis 插件包**（ESM + 真实库 API），与其它 `@deepseek-ai/*` 插件同款做法：
 
 1. 把 `lib/` 内容放到 profile 插件目录：`C:\Users\<你>\.dsh\profiles\desktop\plugins\dsh-feishu-reader\`
-2. 把 [`cordis-patch.snippet.yml`](cordis-patch.snippet.yml) 的 `- insert:` 段合并进 `cordis.patch.yml`
-3. 重启 DSH。**回滚**：删除刚加的 insert 段即可
+2. 把 [`cordis-patch.snippet.yml`](cordis-patch.snippet.yml) 里的 `- insert:` 段合并进你的补丁层 `C:\Users\<你>\.dsh\profiles\desktop\cordis.patch.yml`（该文件即「用户补丁层」，默认是空的 `[]`，就是留给用户加插件行的）
+3. 重启 DSH → 插件自动加载，工具与设置卡片都在
+4. **回滚**：删除刚加的 insert 段即可
+
+> 动态加载（方式 A）与固化（方式 B）跑的是**同一套引擎**（`lib/script.js`），只是加载方式不同。
 
 凭证兼容：App ID 读设置命名空间 `feishu`，App Secret 读凭证库 `FEISHU_APP_SECRET`，并回退旧凭证 `FEISHU_APP_ID` —— 现有配置不用重配。
 
