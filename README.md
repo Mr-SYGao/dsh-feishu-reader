@@ -1,6 +1,6 @@
 # dsh-feishu-reader
 
-DSH（DeepSeek Harness）动态 Cordis 插件：**读取飞书文档**。
+DSH（DeepSeek Harness）Cordis 插件：**读取飞书文档**。既可作为动态插件即时加载，也可固化成真实插件包常驻（DSH 重启后自动加载）。
 
 - 支持链接类型：云文档（`/docx/`）、知识库（`/wiki/`）、电子表格（`/sheets/`）、多维表格（`/base/`）
 - 文字 → 结构化 Markdown（标题 / 列表 / 引用 / 代码块，基于 blocks 接口）
@@ -11,11 +11,12 @@ DSH（DeepSeek Harness）动态 Cordis 插件：**读取飞书文档**。
 | 能力 | 说明 |
 | --- | --- |
 | 文字读取 | docx blocks 接口，保留文档结构 |
+| 表格还原 | docx 表格按 `row_size × column_size` 网格重建为 **Markdown 表格**（含表头） |
 | 图片下载 | `drive/v1/medias/{token}/download`，全部图片落到本地 |
 | 临时缓存 | 图片存系统临时目录 `%TEMP%/dsh-feishu-images`，按飞书文件 token 命名，**同一张图不重复下载**，每次读取自动清理超 24 小时的旧缓存 |
-| 凭证管理 | App ID / App Secret 存到 DSH 凭证库（`FEISHU_APP_ID` / `FEISHU_APP_SECRET`） |
+| 凭证管理 | App ID / App Secret 存到设置命名空间 `feishu`（`settings.yaml`），兼容回退到凭证库（`FEISHU_APP_ID` / `FEISHU_APP_SECRET`） |
 | 设置界面 | 在「设置 → 插件 → 插件配置」里提供折叠式配置卡片 |
-| 模型工具 | `feishu_read` / `feishu_configure` / `feishu_refresh` |
+| 模型工具 | `feishu_read` / `feishu_configure` |
 
 ## 快速开始
 
@@ -39,12 +40,14 @@ DSH（DeepSeek Harness）动态 Cordis 插件：**读取飞书文档**。
 - 云文档 / 表格：把该应用加为文档**协作者**
 - 知识库：把应用加入知识库**成员**
 
-### 4. 加载插件（DSH 动态插件）
+### 4. 加载插件
 
-在 DSH 中通过插件工具（`cordis_define` + `cordis_run`）加载：
+**方式 A：动态插件（临时，进程内）**——通过 DSH 插件工具（`cordis_define` + `cordis_run`）加载：
 
 - `host.js` 内容 → `code.host`
 - `client.js` 内容 → `code.client`
+
+**方式 B：固化常驻（推荐）**——见下方 [固化（常驻）](#固化常驻dsh-重启后自动加载)。
 
 ### 5. 配置凭证
 
@@ -92,9 +95,9 @@ AI 会调用 `feishu_read(url)`：
 
 ## 已知限制
 
-- `raw_content` 被 blocks 接口替代后，表格仍按行文本输出（未转成 Markdown 表格）
+- 表格内的合并单元格：Markdown 无法表达合并，合并覆盖的位置渲染为空单元格（主单元格内容正常显示）
+- 表格单元格内的图片：渲染为 `[图片]` 占位（图片仍会下载，见「已下载图片文件」列表）
 - 单次读取最多下载 30 张图片（超过部分仅提示，不下载）
-- 动态插件是进程内临时的：DSH 重启后需重新加载；如需常驻请固化为 agent preset / cordis.yml 组合
 
 ## License
 
