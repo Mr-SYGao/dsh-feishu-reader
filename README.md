@@ -35,38 +35,17 @@
 
 ## 🚀 安装
 
-> 装完**重启 DSH** 自动加载。推荐**方式一**：一条命令、零手工步骤。
+**前置（只需一次）**：把包发布到 npm —— `cd lib && npm login && npm publish`
 
-### 方式一 · 本地一键脚本（推荐，无需 git / npm）
-
-1. GitHub 页面点 **`Code` → `Download ZIP`** 下载并解压（不需要 git）
-2. 在解压出的目录打开终端，执行：
+**安装命令**（在仓库目录执行）：
 
 ```bash
 node scripts/install-local.mjs
-# 默认 profile=desktop，换用：--profile=tui
 ```
 
-脚本自动完成：复制插件包到 profile → 注册依赖 **并** 注册 bundle（启动自动加载）→ `pnpm install`。**重启 DSH 即生效**，之后源文件可以删掉。卸载：`node scripts/uninstall-local.mjs`。
+自动完成：装包 → 注册启动自动加载 → `pnpm install`。**重启 DSH 即生效**。
 
-### 方式二 · npm 安装（无需下载源码，包发布到 npm 后）
-
-发布方操作（只需一次）：
-
-```bash
-cd lib
-npm login
-npm publish
-```
-
-用户安装（不需要源码）：
-
-```bash
-npm i dsh-feishu-reader                    # 或官方命令：
-dsh plugin --profile desktop add dsh-feishu-reader
-```
-
-> ⚠️ 说明：`npm i` / `dsh plugin add` 只安装包，**不会**自动注册 bundle（这是 DSH 工具现状；modlens 由市场安装自动注册）。所以还要在 profile `package.json` 的 `dsh.profile.bundles` 加一行 `"dsh-feishu-reader"`（或直接用方式一，零手工）。
+也可以先用 DSH 官方命令装包：`dsh plugin --profile desktop add dsh-feishu-reader`，但该命令目前**不会**自动注册启动加载（DSH 工具现状），装完后还需运行一次 `node scripts/install-local.mjs` 补注册。之后更新插件用 `dsh plugin add` 即可。
 
 ---
 

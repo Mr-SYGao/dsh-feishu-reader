@@ -56,10 +56,16 @@ if (!pkg.dsh.profile.bundles.includes(pkgName)) {
 }
 writeFileSync(pkgPath, JSON.stringify(pkg, null, 2) + '\n')
 
-// 3. pnpm install
+// 3. pnpm install（Windows 用 cmd /c 启动 .cmd，避免 shell:true 弃用警告）
 console.log('→ pnpm install …')
-const pnpm = process.platform === 'win32' ? 'pnpm.cmd' : 'pnpm'
-const res = spawnSync(pnpm, ['install'], { cwd: profileDir, stdio: 'inherit' })
+const run = (args) => {
+  const res = process.platform === 'win32'
+    ? spawnSync(process.env.ComSpec, ['/d', '/s', '/c', args.join(' ')], { cwd: profileDir, stdio: 'inherit' })
+    : spawnSync('pnpm', args, { cwd: profileDir, stdio: 'inherit' })
+  if (res.error) throw res.error
+  return res
+}
+const res = run(['pnpm', 'install'])
 if (res.status !== 0) {
   console.error(`✗ pnpm install 失败（exit ${res.status}）`)
   process.exit(1)

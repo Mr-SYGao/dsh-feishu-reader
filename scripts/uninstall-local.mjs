@@ -25,6 +25,12 @@ if (existsSync(pkgPath)) {
 }
 rmSync(target, { recursive: true, force: true })
 console.log('→ pnpm install …')
-const pnpm = process.platform === 'win32' ? 'pnpm.cmd' : 'pnpm'
-spawnSync(pnpm, ['install'], { cwd: profileDir, stdio: 'inherit' })
+const run = (args) => {
+  const res = process.platform === 'win32'
+    ? spawnSync(process.env.ComSpec, ['/d', '/s', '/c', args.join(' ')], { cwd: profileDir, stdio: 'inherit' })
+    : spawnSync('pnpm', args, { cwd: profileDir, stdio: 'inherit' })
+  if (res.error) throw res.error
+  return res
+}
+run(['pnpm', 'install'])
 console.log('✅ 已卸载，重启 DSH 生效')
