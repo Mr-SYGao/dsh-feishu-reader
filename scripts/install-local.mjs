@@ -1,13 +1,17 @@
 #!/usr/bin/env node
-// dsh-feishu-reader 一键本地安装（等价 `dsh plugin add` + 自动注册 bundle）
+// dsh-feishu-reader 一键本地安装（发布前 / 本地开发用）
 //
 // 用法（在仓库目录执行）：
 //   node scripts/install-local.mjs            # 默认 profile: desktop
 //   node scripts/install-local.mjs --profile tui
 //
-// 做什么：
+// 发布后请直接用官方命令：dsh plugin --profile desktop add dsh-feishu-reader
+// （包的 dsh.bundle manifest 会让 dsh plugin add 自动注册启动加载）
+//
+// 本脚本做什么：
 //   1. 把 lib/ 包复制到 profile 的 plugins/dsh-feishu-reader/
-//   2. 在 profile package.json 加依赖 + 注册到 dsh.profile.bundles（bundle 补丁自动加载）
+//   2. 在 profile package.json 加 link: 依赖 + 注册到 dsh.profile.bundles
+//      （link: 而非 file:，避免 pnpm store 快照过期，改 lib/ 后重跑即生效）
 //   3. pnpm install 链接该包
 //   4. 提示重启 DSH 生效
 // 卸载：node scripts/uninstall-local.mjs（或手动删 deps/bundles + pnpm install）
@@ -43,9 +47,11 @@ cpSync(path.join(root, 'lib'), target, {
 const pkgPath = path.join(profileDir, 'package.json')
 const pkg = JSON.parse(readFileSync(pkgPath, 'utf8'))
 pkg.dependencies = pkg.dependencies || {}
-if (!pkg.dependencies[pkgName]) {
-  pkg.dependencies[pkgName] = 'file:plugins/dsh-feishu-reader'
-  console.log(`→ dependencies.${pkgName} = file:plugins/dsh-feishu-reader`)
+const currentSpec = pkg.dependencies[pkgName]
+const isLocalSpec = typeof currentSpec === 'string' && /^(file:|link:|\.{1,2}[\\/]|plugins[\\/])/.test(currentSpec)
+if (!currentSpec || isLocalSpec) {
+  pkg.dependencies[pkgName] = 'link:plugins/dsh-feishu-reader'
+  console.log(`→ dependencies.${pkgName} = link:plugins/dsh-feishu-reader`)
 }
 pkg.dsh = pkg.dsh || {}
 pkg.dsh.profile = pkg.dsh.profile || {}

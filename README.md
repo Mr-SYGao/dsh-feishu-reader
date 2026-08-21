@@ -35,17 +35,32 @@
 
 ## 🚀 安装
 
-**前置（只需一次）**：把包发布到 npm —— `cd lib && npm login && npm publish`
+> 用 DSH 官方命令一键安装，自动注册启动加载，**零手工步骤**。
 
-**安装命令**（在仓库目录执行）：
+**前置（只需一次，发布方）**：把包发布到 npm ——
 
 ```bash
-node scripts/install-local.mjs
+cd lib
+npm login
+npm publish
 ```
 
-自动完成：装包 → 注册启动自动加载 → `pnpm install`。**重启 DSH 即生效**。
+**安装**（在 DSH 终端执行）：
 
-也可以先用 DSH 官方命令装包：`dsh plugin --profile desktop add dsh-feishu-reader`，但该命令目前**不会**自动注册启动加载（DSH 工具现状），装完后还需运行一次 `node scripts/install-local.mjs` 补注册。之后更新插件用 `dsh plugin add` 即可。
+```bash
+dsh plugin --profile desktop add dsh-feishu-reader
+```
+
+**重启 DSH 即生效**。以后更新：再跑一次同一条命令。
+
+> 为什么不用手动配置？包的 `package.json` 声明了 `dsh.bundle` manifest（指向 `cordis.patch.yml`），`dsh plugin add` 会识别它并自动加进 profile 的 `dsh.profile.bundles`，DSH 启动时自动加载。
+
+**本地开发 / 发布前测试**（不需要 npm）：
+
+```bash
+node scripts/install-local.mjs   # 一键安装到本地 profile
+node scripts/uninstall-local.mjs # 卸载
+```
 
 ---
 
@@ -102,7 +117,7 @@ node scripts/install-local.mjs
 <details>
 <summary><b>插件重启后会不会没？</b></summary>
 
-用 `dsh plugin add` 或 `install-local.mjs` 安装（写进 profile）→ 重启自动加载，不会没；会话里临时加载的才会没。
+用 `dsh plugin add` 安装（写进 profile 的 bundles）→ 重启自动加载，不会没；会话里临时加载的才会没。
 </details>
 
 <details>
