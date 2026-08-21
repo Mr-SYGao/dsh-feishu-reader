@@ -1,10 +1,12 @@
 {
   "name": "dsh-feishu-reader",
-  "version": "1.0.0",
-  "description": "DSH 动态 Cordis 插件：读取飞书文档（云文档 docx / 知识库 wiki / 电子表格 sheets / 多维表格 bitable），文字转 Markdown，图片下载到本地临时缓存供 AI 读图。",
-  "main": "host.js",
+  "version": "1.1.0",
+  "description": "DSH Cordis 插件：读取飞书文档（docx/wiki/sheets/bitable），文字转 Markdown，表格还原、图片下载到本地临时缓存供 AI 读图。",
+  "main": "lib/index.js",
   "scripts": {
-    "check": "node --check host.js && node --check client.js"
+    "test": "node --test lib/script.test.js",
+    "check": "node --check lib/script.js && node --check lib/index.js && node --check lib/client.js && node --check host.js && node --check client.js",
+    "build:dynamic": "node scripts/build-dynamic.mjs"
   },
   "keywords": [
     "dsh",
@@ -14,7 +16,8 @@
     "飞书",
     "document",
     "docx",
-    "wiki"
+    "wiki",
+    "markdown"
   ],
   "license": "MIT",
   "engines": {

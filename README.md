@@ -84,20 +84,80 @@ AI 会调用 `feishu_read(url)`：
    `C:\Users\Mr.Gao\.dsh\profiles\desktop\cordis.patch.yml`
 3. 重启 DSH。回滚：删除 `cordis.patch.yml` 里刚加的 insert 段即可。
 
-固化版的凭证规范存储改为设置命名空间 `feishu`（`settings.yaml`），并兼容回退到旧凭证库
-（`FEISHU_APP_ID` / `FEISHU_APP_SECRET`），所以你现有的凭证不用重配。
+固化版的凭证：App ID 存设置命名空间 `feishu`（`settings.yaml`），App Secret 存凭证库
+（`FEISHU_APP_SECRET`）；读取时兼容回退旧凭证（`FEISHU_APP_ID`），现有凭证不用重配。
 
 ## 实现说明
 
-- Host 侧 `web.fetch` 不支持带鉴权头的请求，因此实际 HTTP 调用由 `subprocess` 启动本机 `node` 完成（Node ≥ 18 自带 `fetch`）
-- 图片缓存目录：`<系统临时目录>/dsh-feishu-images/`，TTL 24 小时
-- 不包含任何硬编码密钥：凭证只存于 DSH 凭证库
+- Host 侧 `web.fetch` 不支持带鉴权头的请求，因此实际 HTTP 调用由 `subprocess` 启动本机 `node` 运行引擎（`lib/script.js`）完成（Node ≥ 18 自带 `fetch`）
+- **安全**：App Secret 通过 stdin 传给引擎子进程，**不落命令行参数**
+- 引擎单一来源：`lib/script.js`（动态版 `host.js` / `client.js` 由 `scripts/build-dynamic.mjs` 生成）
+- 图片缓存：`<系统临时目录>/dsh-feishu-images/`，按文件 token 缓存，TTL 24 小时
+- 文档内容缓存：`<系统临时目录>/dsh-feishu-cache/`，TTL 10 分钟，避免重复请求
+- 不包含任何硬编码密钥
 
 ## 已知限制
 
-- 表格内的合并单元格：Markdown 无法表达合并，合并覆盖的位置渲染为空单元格（主单元格内容正常显示）
-- 表格单元格内的图片：渲染为 `[图片]` 占位（图片仍会下载，见「已下载图片文件」列表）
+- Markdown 无法表达表格合并单元格：合并的主单元格内容会复制到覆盖位置（信息不丢），但视觉上非合并
 - 单次读取最多下载 30 张图片（超过部分仅提示，不下载）
+
+## License
+
+[MIT](LICENSE)
+
+---
+
+# dsh-feishu-reader (English)
+
+A DSH (DeepSeek Harness) Cordis plugin that **reads Feishu (Lark) documents** — cloud docs (`/docx/`), wiki (`/wiki/`), spreadsheets (`/sheets/`), and Bitable (`/base/`).
+
+- Text → structured Markdown (headings / lists / quotes / code blocks, via the docx blocks API)
+- Tables → proper Markdown tables (reconstructed from `row_size × column_size` grid + `merge_info`; merged content is repeated so nothing is lost)
+- Images → downloaded to a local temp cache for the AI to read with local vision tools (e.g. `modlens_read_image` / `read_image`)
+- Inline styles preserved (`**bold**`, `` `code` ``, `[links](url)`)
+
+## Features
+
+| Capability | Description |
+| --- | --- |
+| Text | docx blocks API, document structure preserved |
+| Tables | Markdown table reconstruction with header row |
+| Images | downloaded via `drive/v1/medias/{token}/download` to local temp cache |
+| Temp cache | `<temp>/dsh-feishu-images` keyed by file token (no re-download), 24h TTL; doc content cached 10 min |
+| Credentials | App ID in settings namespace `feishu`, App Secret in the credentials store (`FEISHU_APP_SECRET`) |
+| Settings UI | collapsible card under Settings → Plugins → Plugin config |
+| Model tools | `feishu_read` / `feishu_configure` |
+
+## Quick start
+
+1. Create a Feishu custom app at [open.feishu.cn](https://open.feishu.cn/app); copy the **App ID** (`cli_…`) and **App Secret**.
+2. Enable & publish permissions: `docx:document:readonly`, `wiki:wiki:readonly`, `sheets:spreadsheet:readonly`, `bitable:app:readonly`, `drive:drive:readonly` (image download).
+3. Share the docs with the app (add it as a collaborator; for wiki, add it to the space members).
+4. Load the plugin (see below), then configure credentials via the settings card or `feishu_configure`.
+
+## Loading
+
+- **Dynamic (temporary, in-process):** paste `host.js` / `client.js` into `cordis_define` (`code.host` / `code.client`). These are generated from `lib/` via `npm run build:dynamic`.
+- **Persistent (recommended):** the `lib/` directory is a real Cordis package (ESM + real APIs). Put it under your profile's `plugins/`, add the row from [`cordis-patch.snippet.yml`](cordis-patch.snippet.yml) to `cordis.patch.yml`, restart DSH. Rollback: remove the inserted row.
+
+## Development
+
+```bash
+npm run test          # unit tests (node --test)
+npm run check         # syntax checks
+npm run build:dynamic # regenerate host.js / client.js from lib/
+```
+
+## Security & design notes
+
+- Credentials are passed to the engine subprocess via **stdin**, never in command-line arguments.
+- The engine (`lib/script.js`) is the single source of truth; both the dynamic and package builds run the same code.
+- No hardcoded secrets.
+
+## Known limitations
+
+- Markdown cannot express merged table cells: the merged master content is repeated into covered positions (no data loss, but not visually merged).
+- At most 30 images are downloaded per read.
 
 ## License
 

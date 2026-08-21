@@ -1,16 +1,5 @@
-'use strict'
-
-/**
- * 飞书文档读取插件 — Client 半部（DSH 动态 Cordis 插件）
- *
- * 在「设置 → 插件 → 插件配置」里注册一张「飞书」卡片：
- * - 折叠式卡片（标题 + 描述 + 已配置徽标 + 箭头，点击展开）
- * - 配置飞书自建应用的 App ID / App Secret
- * - 保存凭证走 Host RPC（feishu-save），状态查询走 feishu-status
- *
- * 加载方式：把本文件内容（module.exports 返回的插件对象）作为
- * cordis_define 的 code.client 使用；也可直接 require 本模块。
- */
+// 生成文件：由 scripts/build-dynamic.mjs 生成，勿手改。
+// 动态版 Client 半部（cordis_define 的 code.client 用）。
 module.exports = function feishuReaderClient() {
   return {
     apply(ctx) {
@@ -40,6 +29,7 @@ module.exports = function feishuReaderClient() {
           host.call('feishu-status').then((r) => {
             if (!alive) return
             setStatus((r && r.configured) ? 'configured' : 'unconfigured')
+            if (r && r.appId) setAppId(r.appId)
           }).catch(() => {
             if (!alive) return
             setStatus('unconfigured')
