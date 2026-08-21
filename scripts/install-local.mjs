@@ -1,11 +1,13 @@
 #!/usr/bin/env node
-// dsh-feishu-reader 一键本地安装（与 modlens 等 bundle 插件同款机制）
+// dsh-feishu-reader 一键本地安装（等价 `dsh plugin add` + 自动注册 bundle）
 //
-// 用法：node scripts/install-local.mjs [--profile desktop] [--prefix <npm_prefix>]
+// 用法（在仓库目录执行）：
+//   node scripts/install-local.mjs            # 默认 profile: desktop
+//   node scripts/install-local.mjs --profile tui
 //
 // 做什么：
 //   1. 把 lib/ 包复制到 profile 的 plugins/dsh-feishu-reader/
-//   2. 在 profile package.json 加依赖 + 注册到 dsh.profile.bundles
+//   2. 在 profile package.json 加依赖 + 注册到 dsh.profile.bundles（bundle 补丁自动加载）
 //   3. pnpm install 链接该包
 //   4. 提示重启 DSH 生效
 // 卸载：node scripts/uninstall-local.mjs（或手动删 deps/bundles + pnpm install）
