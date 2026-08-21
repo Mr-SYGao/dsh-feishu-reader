@@ -1,0 +1,23 @@
+{
+  "name": "dsh-feishu-reader",
+  "version": "1.0.0",
+  "description": "DSH 动态 Cordis 插件：读取飞书文档（云文档 docx / 知识库 wiki / 电子表格 sheets / 多维表格 bitable），文字转 Markdown，图片下载到本地临时缓存供 AI 读图。",
+  "main": "host.js",
+  "scripts": {
+    "check": "node --check host.js && node --check client.js"
+  },
+  "keywords": [
+    "dsh",
+    "cordis",
+    "feishu",
+    "lark",
+    "飞书",
+    "document",
+    "docx",
+    "wiki"
+  ],
+  "license": "MIT",
+  "engines": {
+    "node": ">=18"
+  }
+}
