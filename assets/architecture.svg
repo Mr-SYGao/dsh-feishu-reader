@@ -1,0 +1,71 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="760" height="300" viewBox="0 0 760 300" font-family="PingFang SC, Microsoft YaHei, sans-serif">
+  <defs>
+    <linearGradient id="box" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#f7faff"/>
+      <stop offset="1" stop-color="#eef4ff"/>
+    </linearGradient>
+    <marker id="arrow" markerWidth="10" markerHeight="10" refX="8" refY="3" orient="auto">
+      <path d="M0,0 L8,3 L0,6 Z" fill="#8aa8ff"/>
+    </marker>
+  </defs>
+  <rect x="0" y="0" width="760" height="300" rx="16" fill="#ffffff"/>
+  <rect x="0" y="0" width="760" height="300" rx="16" fill="none" stroke="#dbe5ff" stroke-width="2"/>
+
+  <!-- row 1: agent -> tool -> engine -->
+  <g>
+    <rect x="24" y="40" width="150" height="70" rx="12" fill="url(#box)" stroke="#8aa8ff" stroke-width="2"/>
+    <text x="99" y="70" text-anchor="middle" font-size="15" font-weight="600" fill="#1f3e8c">AI 助手（模型）</text>
+    <text x="99" y="92" text-anchor="middle" font-size="12" fill="#5b76b8">Agent / Model</text>
+  </g>
+  <line x1="174" y1="75" x2="218" y2="75" stroke="#8aa8ff" stroke-width="2" marker-end="url(#arrow)"/>
+
+  <g>
+    <rect x="224" y="40" width="160" height="70" rx="12" fill="url(#box)" stroke="#3370ff" stroke-width="2"/>
+    <text x="304" y="70" text-anchor="middle" font-size="15" font-weight="600" fill="#1f3e8c">feishu_read 工具</text>
+    <text x="304" y="92" text-anchor="middle" font-size="12" fill="#5b76b8">DSH 插件工具</text>
+  </g>
+  <line x1="384" y1="75" x2="428" y2="75" stroke="#8aa8ff" stroke-width="2" marker-end="url(#arrow)"/>
+
+  <g>
+    <rect x="434" y="40" width="170" height="70" rx="12" fill="url(#box)" stroke="#8aa8ff" stroke-width="2"/>
+    <text x="519" y="70" text-anchor="middle" font-size="15" font-weight="600" fill="#1f3e8c">Node 引擎</text>
+    <text x="519" y="92" text-anchor="middle" font-size="12" fill="#5b76b8">lib/script.js · stdin 传参</text>
+  </g>
+  <line x1="604" y1="75" x2="648" y2="75" stroke="#8aa8ff" stroke-width="2" marker-end="url(#arrow)"/>
+
+  <g>
+    <rect x="654" y="40" width="82" height="70" rx="12" fill="#3370ff"/>
+    <text x="695" y="70" text-anchor="middle" font-size="13" font-weight="600" fill="#ffffff">飞书</text>
+    <text x="695" y="90" text-anchor="middle" font-size="12" fill="#dce8ff">Open API</text>
+  </g>
+
+  <!-- row 2: outputs -->
+  <g>
+    <rect x="24" y="180" width="230" height="96" rx="12" fill="url(#box)" stroke="#37c96b" stroke-width="2"/>
+    <text x="139" y="205" text-anchor="middle" font-size="14" font-weight="600" fill="#1c6b3c">Markdown 正文</text>
+    <text x="139" y="228" text-anchor="middle" font-size="12" fill="#4a8a63">标题 / 列表 / 代码 / Markdown 表格</text>
+    <text x="139" y="248" text-anchor="middle" font-size="12" fill="#4a8a63">行内加粗 / 代码 / 链接</text>
+    <text x="139" y="266" text-anchor="middle" font-size="11" fill="#8aa8a0">文档内容缓存 10 分钟</text>
+  </g>
+
+  <g>
+    <rect x="274" y="180" width="230" height="96" rx="12" fill="url(#box)" stroke="#f2a03d" stroke-width="2"/>
+    <text x="389" y="205" text-anchor="middle" font-size="14" font-weight="600" fill="#8a5a1c">图片本地下载</text>
+    <text x="389" y="228" text-anchor="middle" font-size="12" fill="#a07a3a">临时缓存 %TEMP%/dsh-feishu-images</text>
+    <text x="389" y="248" text-anchor="middle" font-size="12" fill="#a07a3a">按 token 缓存 · 24h 自动清理</text>
+    <text x="389" y="266" text-anchor="middle" font-size="12" fill="#a07a3a">AI 用本地视觉工具读图</text>
+  </g>
+
+  <g>
+    <rect x="524" y="180" width="212" height="96" rx="12" fill="url(#box)" stroke="#8a5cf6" stroke-width="2"/>
+    <text x="630" y="205" text-anchor="middle" font-size="14" font-weight="600" fill="#542c9c">安全凭证</text>
+    <text x="630" y="228" text-anchor="middle" font-size="12" fill="#7a5cc0">App ID → settings 命名空间</text>
+    <text x="630" y="248" text-anchor="middle" font-size="12" fill="#7a5cc0">App Secret → 凭证库</text>
+    <text x="630" y="266" text-anchor="middle" font-size="12" fill="#7a5cc0">stdin 传参 · 不落命令行</text>
+  </g>
+
+  <!-- arrows from feishu down -->
+  <line x1="560" y1="110" x2="560" y2="176" stroke="#c9d6ff" stroke-width="2" marker-end="url(#arrow)"/>
+  <line x1="389" y1="110" x2="389" y2="176" stroke="#c9d6ff" stroke-width="2" marker-end="url(#arrow)"/>
+  <line x1="139" y1="110" x2="139" y2="176" stroke="#c9d6ff" stroke-width="2" marker-end="url(#arrow)"/>
+</svg>

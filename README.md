@@ -1,31 +1,60 @@
-# dsh-feishu-reader
+<div align="center">
 
-DSH（DeepSeek Harness）Cordis 插件：**读取飞书文档**。既可作为动态插件即时加载，也可固化成真实插件包常驻（DSH 重启后自动加载）。
+<img src="assets/logo.svg" width="110" alt="dsh-feishu-reader logo"/>
 
-- 支持链接类型：云文档（`/docx/`）、知识库（`/wiki/`）、电子表格（`/sheets/`）、多维表格（`/base/`）
-- 文字 → 结构化 Markdown（标题 / 列表 / 引用 / 代码块，基于 blocks 接口）
-- 图片 → 下载到本地临时缓存，供 AI 用本地视觉工具（如 `modlens_read_image` / `read_image`）读图
+# 🚢 dsh-feishu-reader
 
-## 功能特性
+**读取飞书文档 — 文字 / 表格 / 图片，一键转 Markdown 喂给 AI**
+<br/>
+*Read Feishu (Lark) docs — text, tables & images — as Markdown for your AI*
 
-| 能力 | 说明 |
-| --- | --- |
-| 文字读取 | docx blocks 接口，保留文档结构 |
-| 表格还原 | docx 表格按 `row_size × column_size` 网格重建为 **Markdown 表格**（含表头） |
-| 图片下载 | `drive/v1/medias/{token}/download`，全部图片落到本地 |
-| 临时缓存 | 图片存系统临时目录 `%TEMP%/dsh-feishu-images`，按飞书文件 token 命名，**同一张图不重复下载**，每次读取自动清理超 24 小时的旧缓存 |
-| 凭证管理 | App ID / App Secret 存到设置命名空间 `feishu`（`settings.yaml`），兼容回退到凭证库（`FEISHU_APP_ID` / `FEISHU_APP_SECRET`） |
-| 设置界面 | 在「设置 → 插件 → 插件配置」里提供折叠式配置卡片 |
-| 模型工具 | `feishu_read` / `feishu_configure` |
+[![version](https://img.shields.io/badge/version-1.1.0-3370ff?style=flat-square)](https://github.com/Mr-SYGao/dsh-feishu-reader)
+[![license](https://img.shields.io/badge/license-MIT-green?style=flat-square)](LICENSE)
+[![node](https://img.shields.io/badge/node-%3E%3D18-339933?style=flat-square)](package.json)
+[![tests](https://img.shields.io/badge/tests-12%20passed-37c96b?style=flat-square)](#-开发)
+[![PRs](https://img.shields.io/badge/PRs-welcome-8a5cf6?style=flat-square)](https://github.com/Mr-SYGao/dsh-feishu-reader)
 
-## 快速开始
+</div>
 
-### 1. 创建飞书自建应用
+---
 
-1. 打开 [飞书开放平台](https://open.feishu.cn/app) → 创建企业自建应用
-2. 「凭证与基础信息」里拿到 **App ID**（`cli_` 开头）和 **App Secret**
+## 📖 目录 / Contents
 
-### 2. 开通权限（应用 → 权限管理 → 开通并发布）
+- [✨ 特性 / Features](#-特性--features)
+- [🖼️ 效果预览 / Preview](#-效果预览--preview)
+- [🚀 快速开始 / Quick Start](#-快速开始--quick-start)
+- [🔧 模型工具 / Model Tools](#-模型工具--model-tools)
+- [🧠 工作原理 / How It Works](#-工作原理--how-it-works)
+- [💾 固化常驻 / Persistence](#-固化常驻--persistence)
+- [🛠️ 开发 / Development](#-开发--development)
+- [❓ 常见问题 / FAQ](#-常见问题--faq)
+- [📄 License](#-license)
+
+## ✨ 特性 / Features
+
+| | 能力 | 说明 |
+| --- | --- | --- |
+| 📝 | **文字读取** | docx blocks 接口，保留标题 / 列表 / 引用 / 代码块结构 |
+| 🧾 | **表格还原** | 按 `row_size × column_size` 网格重建 **Markdown 表格**（含表头），合并单元格内容不丢失 |
+| 🖼️ | **图片下载** | `drive/v1/medias/{token}/download` 全量下载到本地，AI 可用视觉工具读图 |
+| 🎨 | **行内格式** | `**加粗**`、`` `行内代码` ``、`[链接](url)` 保留 |
+| 🗃️ | **临时缓存** | 图片按 token 缓存（24h TTL）、文档内容缓存（10 分钟），避免重复请求 |
+| 🔐 | **安全凭证** | App Secret 存凭证库、经 **stdin** 传给引擎，**不落命令行参数** |
+| ⚙️ | **设置界面** | 「设置 → 插件 → 插件配置」折叠卡片，可视化配置 |
+
+支持链接类型：**docx**（云文档）· **wiki**（知识库）· **sheets**（电子表格）· **base**（多维表格）。
+
+## 🖼️ 效果预览 / Preview
+
+<img src="assets/preview.svg" alt="设置卡片与 Markdown 输出预览" width="100%"/>
+
+## 🚀 快速开始 / Quick Start
+
+### 1️⃣ 创建飞书自建应用
+
+打开 [飞书开放平台](https://open.feishu.cn/app) → 创建**企业自建应用**，在「凭证与基础信息」拿到 **App ID**（`cli_` 开头）与 **App Secret**。
+
+### 2️⃣ 开通权限（应用 → 权限管理 → 开通并发布）
 
 | 权限 | 用途 |
 | --- | --- |
@@ -35,130 +64,89 @@ DSH（DeepSeek Harness）Cordis 插件：**读取飞书文档**。既可作为�
 | `bitable:app:readonly` | 读取多维表格 |
 | `drive:drive:readonly` | 下载文档内图片 |
 
-### 3. 授权文档给应用
+### 3️⃣ 授权文档给应用
 
-- 云文档 / 表格：把该应用加为文档**协作者**
+- 云文档 / 表格：把应用加为文档**协作者**
 - 知识库：把应用加入知识库**成员**
 
-### 4. 加载插件
+### 4️⃣ 加载插件（两种方式）
 
-**方式 A：动态插件（临时，进程内）**——通过 DSH 插件工具（`cordis_define` + `cordis_run`）加载：
+| 方式 | 说明 |
+| --- | --- |
+| **A · 动态加载**（临时） | 把 [`host.js`](host.js) / [`client.js`](client.js) 分别作为 `cordis_define` 的 `code.host` / `code.client` |
+| **B · 固化常驻**（推荐） | 见 [固化常驻](#-固化常驻--persistence)，DSH 重启后自动加载 |
 
-- `host.js` 内容 → `code.host`
-- `client.js` 内容 → `code.client`
-
-**方式 B：固化常驻（推荐）**——见下方 [固化（常驻）](#固化常驻dsh-重启后自动加载)。
-
-### 5. 配置凭证
-
-两种方式任选：
+### 5️⃣ 配置凭证
 
 - 设置页：**设置 → 插件 → 插件配置 → 飞书**，填入 App ID / App Secret，点「保存凭证」
-- 或调用工具 `feishu_configure(app_id, app_secret)`
+- 或调用工具：`feishu_configure(app_id, app_secret)`
 
-## 使用
+## 🔧 模型工具 / Model Tools
 
-给 AI 一条飞书文档链接即可，例如：
-
-```
-https://xxx.feishu.cn/docx/AbCdEf...
-https://xxx.feishu.cn/wiki/WlMnOp...
-https://xxx.feishu.cn/sheets/QrSt...
-https://xxx.feishu.cn/base/UvWx...
-```
-
-AI 会调用 `feishu_read(url)`：
-
-1. 解析链接类型与文档 token
-2. 读取文字（blocks → Markdown）
-3. 下载全部图片到本地临时缓存（命中缓存则不重复下载）
-4. 返回 Markdown + 图片本地路径，再用本地视觉工具读图
-
-## 固化（常驻，DSH 重启后自动加载）
-
-`lib/` 目录是**真实 Cordis 插件包**（ESM + 真实库 API），可挂进宿主组合，与其它 `@deepseek-ai/*` 插件同款做法：
-
-1. 把 `lib/` 的内容放到 profile 的插件目录：
-   `C:\Users\Mr.Gao\.dsh\profiles\desktop\plugins\dsh-feishu-reader\`
-2. 把 [`cordis-patch.snippet.yml`](cordis-patch.snippet.yml) 里的 `- insert:` 段合并进：
-   `C:\Users\Mr.Gao\.dsh\profiles\desktop\cordis.patch.yml`
-3. 重启 DSH。回滚：删除 `cordis.patch.yml` 里刚加的 insert 段即可。
-
-固化版的凭证：App ID 存设置命名空间 `feishu`（`settings.yaml`），App Secret 存凭证库
-（`FEISHU_APP_SECRET`）；读取时兼容回退旧凭证（`FEISHU_APP_ID`），现有凭证不用重配。
-
-## 实现说明
-
-- Host 侧 `web.fetch` 不支持带鉴权头的请求，因此实际 HTTP 调用由 `subprocess` 启动本机 `node` 运行引擎（`lib/script.js`）完成（Node ≥ 18 自带 `fetch`）
-- **安全**：App Secret 通过 stdin 传给引擎子进程，**不落命令行参数**
-- 引擎单一来源：`lib/script.js`（动态版 `host.js` / `client.js` 由 `scripts/build-dynamic.mjs` 生成）
-- 图片缓存：`<系统临时目录>/dsh-feishu-images/`，按文件 token 缓存，TTL 24 小时
-- 文档内容缓存：`<系统临时目录>/dsh-feishu-cache/`，TTL 10 分钟，避免重复请求
-- 不包含任何硬编码密钥
-
-## 已知限制
-
-- Markdown 无法表达表格合并单元格：合并的主单元格内容会复制到覆盖位置（信息不丢），但视觉上非合并
-- 单次读取最多下载 30 张图片（超过部分仅提示，不下载）
-
-## License
-
-[MIT](LICENSE)
-
----
-
-# dsh-feishu-reader (English)
-
-A DSH (DeepSeek Harness) Cordis plugin that **reads Feishu (Lark) documents** — cloud docs (`/docx/`), wiki (`/wiki/`), spreadsheets (`/sheets/`), and Bitable (`/base/`).
-
-- Text → structured Markdown (headings / lists / quotes / code blocks, via the docx blocks API)
-- Tables → proper Markdown tables (reconstructed from `row_size × column_size` grid + `merge_info`; merged content is repeated so nothing is lost)
-- Images → downloaded to a local temp cache for the AI to read with local vision tools (e.g. `modlens_read_image` / `read_image`)
-- Inline styles preserved (`**bold**`, `` `code` ``, `[links](url)`)
-
-## Features
-
-| Capability | Description |
+| 工具 | 作用 |
 | --- | --- |
-| Text | docx blocks API, document structure preserved |
-| Tables | Markdown table reconstruction with header row |
-| Images | downloaded via `drive/v1/medias/{token}/download` to local temp cache |
-| Temp cache | `<temp>/dsh-feishu-images` keyed by file token (no re-download), 24h TTL; doc content cached 10 min |
-| Credentials | App ID in settings namespace `feishu`, App Secret in the credentials store (`FEISHU_APP_SECRET`) |
-| Settings UI | collapsible card under Settings → Plugins → Plugin config |
-| Model tools | `feishu_read` / `feishu_configure` |
+| `feishu_read(url, app_id?, app_secret?)` | 读取文档链接 → Markdown + 图片本地路径 |
+| `feishu_configure(app_id, app_secret)` | 保存凭证（App ID → 设置，App Secret → 凭证库） |
 
-## Quick start
+> 直接把链接丢给 AI 即可，例如 `https://xxx.feishu.cn/wiki/WlMnOp...`。
 
-1. Create a Feishu custom app at [open.feishu.cn](https://open.feishu.cn/app); copy the **App ID** (`cli_…`) and **App Secret**.
-2. Enable & publish permissions: `docx:document:readonly`, `wiki:wiki:readonly`, `sheets:spreadsheet:readonly`, `bitable:app:readonly`, `drive:drive:readonly` (image download).
-3. Share the docs with the app (add it as a collaborator; for wiki, add it to the space members).
-4. Load the plugin (see below), then configure credentials via the settings card or `feishu_configure`.
+## 🧠 工作原理 / How It Works
 
-## Loading
+<img src="assets/architecture.svg" alt="架构图" width="100%"/>
 
-- **Dynamic (temporary, in-process):** paste `host.js` / `client.js` into `cordis_define` (`code.host` / `code.client`). These are generated from `lib/` via `npm run build:dynamic`.
-- **Persistent (recommended):** the `lib/` directory is a real Cordis package (ESM + real APIs). Put it under your profile's `plugins/`, add the row from [`cordis-patch.snippet.yml`](cordis-patch.snippet.yml) to `cordis.patch.yml`, restart DSH. Rollback: remove the inserted row.
+1. AI 调用 `feishu_read(url)` → Host 解析链接类型与文档 token
+2. 引擎（`lib/script.js`，Node ≥ 18 自带 `fetch`）通过 **stdin** 接收凭证，调飞书 Open API
+3. 文字经 blocks 接口转结构化 Markdown（表格网格重建、行内格式保留）
+4. 图片下载到系统临时目录，AI 再用本地视觉工具（`modlens_read_image` / `read_image`）读图
 
-## Development
+> 为什么用子进程：Host 侧 `web.fetch` 不支持带鉴权头的请求，故由 `subprocess` 启动本机 `node` 执行引擎。
+
+## 💾 固化常驻 / Persistence
+
+`lib/` 目录是**真实 Cordis 插件包**（ESM + 真实库 API），与其它 `@deepseek-ai/*` 插件同款做法：
+
+1. 把 `lib/` 内容放到 profile 插件目录：`C:\Users\<你>\.dsh\profiles\desktop\plugins\dsh-feishu-reader\`
+2. 把 [`cordis-patch.snippet.yml`](cordis-patch.snippet.yml) 的 `- insert:` 段合并进 `cordis.patch.yml`
+3. 重启 DSH。**回滚**：删除刚加的 insert 段即可
+
+凭证兼容：App ID 读设置命名空间 `feishu`，App Secret 读凭证库 `FEISHU_APP_SECRET`，并回退旧凭证 `FEISHU_APP_ID` —— 现有配置不用重配。
+
+## 🛠️ 开发 / Development
 
 ```bash
-npm run test          # unit tests (node --test)
-npm run check         # syntax checks
-npm run build:dynamic # regenerate host.js / client.js from lib/
+npm run test           # 单元测试（node --test，12 个用例）
+npm run check          # 语法检查（lib/ + 生成的动态版）
+npm run build:dynamic  # 从 lib/ 重新生成 host.js / client.js
 ```
 
-## Security & design notes
+**单一来源**：引擎逻辑只在 [`lib/script.js`](lib/script.js)，动态版由构建脚本生成，杜绝两处漂移。
 
-- Credentials are passed to the engine subprocess via **stdin**, never in command-line arguments.
-- The engine (`lib/script.js`) is the single source of truth; both the dynamic and package builds run the same code.
-- No hardcoded secrets.
+## ❓ 常见问题 / FAQ
 
-## Known limitations
+<details>
+<summary><b>图片下载失败？</b></summary>
 
-- Markdown cannot express merged table cells: the merged master content is repeated into covered positions (no data loss, but not visually merged).
-- At most 30 images are downloaded per read.
+检查应用是否开通 `drive:drive:readonly` 并发布，且文档已分享给应用。
+</details>
 
-## License
+<details>
+<summary><b>报「缺少飞书凭证」？</b></summary>
 
-[MIT](LICENSE)
+到设置卡片或 `feishu_configure` 保存 App ID / App Secret；或调用时直接传 `app_id` / `app_secret`。
+</details>
+
+<details>
+<summary><b>合并单元格显示重复内容？</b></summary>
+
+Markdown 无法表达合并，插件把主单元格内容复制到覆盖位置以保证信息不丢（视觉上非合并，属正常）。
+</details>
+
+<details>
+<summary><b>动态插件重启后没了？</b></summary>
+
+动态插件是进程内临时的。如需常驻，用[固化常驻](#-固化常驻--persistence)方案。
+</details>
+
+## 📄 License
+
+[MIT](LICENSE) · Made with 🚢 for the DSH / Feishu community

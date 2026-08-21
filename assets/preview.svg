@@ -1,0 +1,61 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="900" height="430" viewBox="0 0 900 430" font-family="PingFang SC, Microsoft YaHei, monospace">
+  <defs>
+    <linearGradient id="panel" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#ffffff"/>
+      <stop offset="1" stop-color="#f8faff"/>
+    </linearGradient>
+  </defs>
+  <rect x="0" y="0" width="900" height="430" rx="16" fill="#eef2fb"/>
+
+  <!-- 卡片预览 -->
+  <rect x="24" y="30" width="420" height="372" rx="16" fill="url(#panel)" stroke="#dbe5ff" stroke-width="2"/>
+  <text x="44" y="58" font-size="14" font-weight="600" fill="#33406b">设置卡片（插件配置）</text>
+
+  <!-- card -->
+  <rect x="44" y="76" width="380" height="60" rx="12" fill="#ffffff" stroke="#dbe5ff"/>
+  <circle cx="76" cy="106" r="16" fill="#e6f0ff"/>
+  <path d="M68 112l5-5 3.4 3.4 4.6-4.6 5 5" fill="none" stroke="#3370ff" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/>
+  <text x="102" y="101" font-size="15" font-weight="600" fill="#1f2d4d">飞书</text>
+  <text x="102" y="120" font-size="11" fill="#8a94b8">读取飞书云文档、知识库、表格</text>
+  <rect x="330" y="90" width="52" height="20" rx="10" fill="#e6f7ee"/>
+  <text x="356" y="104" text-anchor="middle" font-size="11" fill="#1c8a4d">已配置</text>
+  <path d="M412 96l6 6-6 6" fill="none" stroke="#8a94b8" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+
+  <!-- card body -->
+  <rect x="44" y="140" width="380" height="240" rx="12" fill="#ffffff" stroke="#dbe5ff"/>
+  <text x="64" y="168" font-size="12" font-weight="600" fill="#33406b">App ID</text>
+  <rect x="64" y="176" width="340" height="34" rx="8" fill="#f8faff" stroke="#dbe5ff"/>
+  <text x="76" y="198" font-size="12" fill="#b0b9d6">cli_aad346877ab89bea</text>
+  <text x="64" y="232" font-size="12" font-weight="600" fill="#33406b">App Secret</text>
+  <rect x="64" y="240" width="340" height="34" rx="8" fill="#f8faff" stroke="#dbe5ff"/>
+  <text x="76" y="262" font-size="12" fill="#b0b9d6">••••••••••••••••••••••（留空保持不变）</text>
+  <rect x="64" y="292" width="340" height="34" rx="8" fill="#f8faff" stroke="#dbe5ff"/>
+  <text x="76" y="314" font-size="11" fill="#b0b9d6">权限：docx / wiki / sheets / bitable / drive · 只读</text>
+  <rect x="300" y="342" width="104" height="30" rx="8" fill="#3370ff"/>
+  <text x="352" y="362" text-anchor="middle" font-size="12" font-weight="600" fill="#ffffff">保存凭证</text>
+
+  <!-- 输出预览 -->
+  <rect x="456" y="30" width="420" height="372" rx="16" fill="url(#panel)" stroke="#dbe5ff" stroke-width="2"/>
+  <text x="476" y="58" font-size="14" font-weight="600" fill="#33406b">feishu_read 返回（Markdown）</text>
+
+  <rect x="476" y="76" width="380" height="306" rx="10" fill="#ffffff" stroke="#e2e8f5"/>
+  <text x="496" y="102" font-size="14" font-weight="700" fill="#1f2d4d"># 轮渡-打印模板-新增精品返程权益二维码</text>
+  <text x="496" y="126" font-size="12" fill="#333">原始需求：</text>
+  <text x="496" y="148" font-size="12" fill="#333">航班-购买凭证　流水班-购买凭证</text>
+  <text x="496" y="170" font-size="13" font-weight="700" fill="#333">**需求**　**内容文字居左展示**</text>
+
+  <!-- table -->
+  <g font-size="11">
+    <text x="496" y="200" font-size="12" font-weight="600" fill="#33406b"># 工作量评估</text>
+    <rect x="496" y="212" width="340" height="22" fill="#f0f5ff"/>
+    <text x="504" y="227" fill="#1f3e8c">|  | 前端 | 后端 | 自助机 | 测试 | 驱动 | 实施 | 合计 |  |</text>
+    <text x="504" y="243" fill="#9aa7c7">| --- | --- | --- | --- | --- | --- | --- | --- | --- |</text>
+    <rect x="496" y="250" width="340" height="22" fill="#ffffff"/>
+    <text x="504" y="265" fill="#333">| 方案1 | 0.5 | 0.5 | 0.5 | 0.5 | 0.5 | 2 | 4.5 |  |</text>
+    <rect x="496" y="272" width="340" height="22" fill="#f8faff"/>
+    <text x="504" y="287" fill="#333">| 方案2 | 1 | 0.5 | 0.5 | 0.5 | 0.5 | 2 | 5 | 选择此方案 |</text>
+  </g>
+  <text x="496" y="322" font-size="12" fill="#333">【图片 6】本地路径：%TEMP%\dsh-feishu-images\DQUn…png</text>
+  <text x="496" y="344" font-size="11" fill="#8a94b8">已下载图片文件（可用 modlens_read_image 读取）：</text>
+  <text x="496" y="362" font-size="11" fill="#8a94b8">%TEMP%\dsh-feishu-images\V39dbX… · R7uYbL… · …</text>
+</svg>
