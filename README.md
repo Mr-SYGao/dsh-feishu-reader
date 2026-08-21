@@ -35,15 +35,26 @@
 
 ## 🚀 三步使用
 
-### ① 加载插件
+### ① 加载插件（二选一）
 
-把本仓库链接（或 [`host.js`](host.js) / [`client.js`](client.js) 的内容）发给你的 DSH 助手，说：
+**方式 A · 一键安装（推荐，重启不丢）**——在终端执行：
+
+```bash
+git clone https://github.com/Mr-SYGao/dsh-feishu-reader.git
+cd dsh-feishu-reader
+node scripts/install-local.mjs
+# 然后重启 DSH，插件自动加载
+```
+
+> 这是正式安装（与 modlens 等插件同款 bundle 机制）：复制包 → 注册到 profile → `pnpm install`，重启后自动加载、不会丢。卸载：`node scripts/uninstall-local.mjs`。
+
+**方式 B · 让助手加载（最快试用，重启会没）**——把本仓库链接发给 DSH 助手，说：
 
 > **「加载这个飞书插件」**
 
 助手会自动定义并激活插件；**如果提示批准，点一下允许**即可。
 
-> 验证：等 1 分钟，工具列表出现 `feishu_read` / `feishu_configure` 就成功了。
+> 验证：工具列表出现 `feishu_read` / `feishu_configure` 就成功了。
 
 ### ② 配置凭证
 
@@ -117,7 +128,7 @@ npm login
 npm publish     # 包名 dsh-feishu-reader（npm 上未被占用）
 ```
 
-别人安装：把它加进 profile 的 `package.json`（`"dsh-feishu-reader": "^1.0.0"` + `dsh.profile.bundles` 加一行）→ `pnpm install` → 重启。若再提交到 DSH 社区市场目录（dshfind / dsh-1024store），用户就能在「设置 → 插件 → 社区市场」**一键搜索安装**。
+别人安装：把它加进 profile 的 `package.json`（`"dsh-feishu-reader": "^1.0.0"` + `dsh.profile.bundles` 加一行）→ `pnpm install` → 重启即可。
 
 **③ 手动固化（可选）**：把 `lib/` 放到 `plugins/dsh-feishu-reader/`，再把 [`cordis-patch.snippet.yml`](cordis-patch.snippet.yml) 的 insert 段合并进 profile 的 `cordis.patch.yml`，重启即可；回滚 = 删掉那一段。
 
