@@ -1,0 +1,18 @@
+{
+  "name": "dsh-feishu-reader",
+  "version": "1.0.0",
+  "description": "DSH 插件：读取飞书文档（docx/wiki/sheets/bitable），文字转 Markdown，图片下载到本地临时缓存供 AI 读图。",
+  "type": "module",
+  "main": "./lib/index.js",
+  "exports": {
+    ".": "./lib/index.js",
+    "./client": "./lib/client.js",
+    "./package.json": "./package.json"
+  },
+  "dsh": {
+    "client": {
+      "platform": "web"
+    }
+  },
+  "license": "MIT"
+}

@@ -1,0 +1,13 @@
+# dsh-feishu-reader 固化补丁片段
+#
+# 作用：把飞书文档读取插件（真实插件包）挂进宿主组合，DSH 启动即加载。
+# 用法：把下面的 insert 合并到你的 profile 补丁层：
+#   C:\Users\Mr.Gao\.dsh\profiles\desktop\cordis.patch.yml
+# 注意：
+#   - baseUrl = profile 目录，所以相对路径 ./plugins/... 相对它解析。
+#   - 插件包放在 profile 的 plugins/dsh-feishu-reader/ 下（lib/ 即包内容）。
+#   - 包内 import 的 @deepseek-ai/* 由宿主加载器钩子解析（与应用内其它插件同源）。
+#   - 改完需要重启 DSH 生效。回滚：删除这段 insert 即可。
+- insert:
+    - id: feishu-reader
+      name: './plugins/dsh-feishu-reader/lib/index.js'

@@ -71,6 +71,19 @@ AI 会调用 `feishu_read(url)`：
 3. 下载全部图片到本地临时缓存（命中缓存则不重复下载）
 4. 返回 Markdown + 图片本地路径，再用本地视觉工具读图
 
+## 固化（常驻，DSH 重启后自动加载）
+
+`lib/` 目录是**真实 Cordis 插件包**（ESM + 真实库 API），可挂进宿主组合，与其它 `@deepseek-ai/*` 插件同款做法：
+
+1. 把 `lib/` 的内容放到 profile 的插件目录：
+   `C:\Users\Mr.Gao\.dsh\profiles\desktop\plugins\dsh-feishu-reader\`
+2. 把 [`cordis-patch.snippet.yml`](cordis-patch.snippet.yml) 里的 `- insert:` 段合并进：
+   `C:\Users\Mr.Gao\.dsh\profiles\desktop\cordis.patch.yml`
+3. 重启 DSH。回滚：删除 `cordis.patch.yml` 里刚加的 insert 段即可。
+
+固化版的凭证规范存储改为设置命名空间 `feishu`（`settings.yaml`），并兼容回退到旧凭证库
+（`FEISHU_APP_ID` / `FEISHU_APP_SECRET`），所以你现有的凭证不用重配。
+
 ## 实现说明
 
 - Host 侧 `web.fetch` 不支持带鉴权头的请求，因此实际 HTTP 调用由 `subprocess` 启动本机 `node` 完成（Node ≥ 18 自带 `fetch`）
