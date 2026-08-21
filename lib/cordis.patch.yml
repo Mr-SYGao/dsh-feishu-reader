@@ -1,0 +1,5 @@
+# dsh bundle layer: mount the feishu-reader plugin.
+# 装进 profile 的 dsh.profile.bundles 后，DSH 启动会自动加载本插件。
+- insert:
+    - id: feishu-reader
+      name: 'dsh-feishu-reader'

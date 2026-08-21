@@ -1,18 +1,43 @@
 {
   "name": "dsh-feishu-reader",
-  "version": "1.0.0",
-  "description": "DSH 插件：读取飞书文档（docx/wiki/sheets/bitable），文字转 Markdown，图片下载到本地临时缓存供 AI 读图。",
+  "version": "1.1.0",
+  "description": "DSH Cordis plugin: read Feishu (Lark) docs — text, tables & images — as Markdown for your AI. 读取飞书文档（docx/wiki/sheets/bitable），文字转 Markdown、表格还原、图片下载供 AI 读图。",
   "type": "module",
-  "main": "./lib/index.js",
+  "main": "./index.js",
   "exports": {
-    ".": "./lib/index.js",
-    "./client": "./lib/client.js",
+    ".": "./index.js",
+    "./client": "./client.js",
     "./package.json": "./package.json"
   },
+  "files": [
+    "index.js",
+    "client.js",
+    "script.js",
+    "script.test.js",
+    "cordis.patch.yml"
+  ],
   "dsh": {
     "client": {
       "platform": "web"
     }
   },
-  "license": "MIT"
+  "keywords": [
+    "dsh",
+    "cordis",
+    "feishu",
+    "lark",
+    "飞书",
+    "document",
+    "docx",
+    "wiki",
+    "markdown"
+  ],
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Mr-SYGao/dsh-feishu-reader.git"
+  },
+  "engines": {
+    "node": ">=18"
+  }
 }

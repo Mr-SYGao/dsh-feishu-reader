@@ -80,31 +80,48 @@
 - 没出现批准提示 → 检查是否已在插件管理界面确认运行
 - 工具列表里没有 `feishu_read` → 插件可能未激活成功，重新「加载这个飞书插件」
 - 设置里找不到「飞书」卡片 → 看 **设置 → 插件 → 插件配置**（不是「全部」）
-- 想**重启后不用重新加载** → 用下方的**固化安装**（一劳永逸）
+- 想**重启后不用重新加载** → 用下方的**正式安装（bundle 包方式）**（一劳永逸）
 
 </details>
 
 <details>
-<summary><b>⚙️ 进阶：DSH 插件机制 & 固化安装（重启不丢）</b></summary>
+<summary><b>⚙️ 进阶：正式安装（bundle 包方式，与 modlens 等插件同款）</b></summary>
 
-**DSH 插件是什么**：插件由 **host 半部**（服务端：工具/API，即 `host.js`）和 **client 半部**（浏览器：设置界面，即 `client.js`）组成。加载 = `cordis_define`（定义）+ `cordis_run`（激活）。
+**DSH 插件是什么**：插件由 **host 半部**（服务端：工具/API）和 **client 半部**（浏览器：设置界面）组成。`lib/` 就是一个完整的正式插件包（包根导出 host 插件 + 自带 `cordis.patch.yml` bundle 补丁），装上即自动加载——和 `@liustack/modlens` 完全同款机制。
 
-**两种加载方式**：
+**三种加载方式对比**：
 
-| | 动态加载 | 固化安装 |
-| --- | --- | --- |
-| 怎么装 | 会话里让助手加载 | 写进 `cordis.patch.yml` 组合文件 |
-| 代码存在哪 | 进程内存 | 磁盘配置文件 |
-| 重启后 | ❌ 没了，需重载 | ✅ 自动加载，不会没 |
-| 适合 | 临时试用 | 正式使用 / 分发 |
+| | 动态加载 | 本地一键安装 | npm 发布安装 |
+| --- | --- | --- | --- |
+| 怎么装 | 会话里让助手加载 | `node scripts/install-local.mjs` | `npm publish` + 加进 bundles |
+| 代码存在哪 | 进程内存 | profile 的 `plugins/` | npm 仓库 |
+| 重启后 | ❌ 没了 | ✅ 自动加载 | ✅ 自动加载 |
+| 适合 | 临时试用 | 自用正式 | 分发给别人 |
 
-**固化安装步骤**（技术向）：
+**① 本地一键安装（推荐自用）**：
 
-1. 把 `lib/` 内容放到 `C:\Users\<你>\.dsh\profiles\desktop\plugins\dsh-feishu-reader\`
-2. 把 [`cordis-patch.snippet.yml`](cordis-patch.snippet.yml) 的 `- insert:` 段合并进 `C:\Users\<你>\.dsh\profiles\desktop\cordis.patch.yml`
-3. 重启 DSH → 自动加载；回滚 = 删除那一段
+```bash
+node scripts/install-local.mjs
+# 默认装到 ~/.dsh/profiles/desktop；换 profile：--profile=xxx
+```
 
-> 两种方式跑的是**同一套引擎**（`lib/script.js`），只是加载方式不同。
+脚本会自动：复制 `lib/` → profile 的 `plugins/dsh-feishu-reader/` → 注册进 `package.json` 的 `dependencies` + `dsh.profile.bundles` → `pnpm install`。完成后**重启 DSH 即自动加载**。
+
+卸载：`node scripts/uninstall-local.mjs`
+
+**② npm 发布（分发给别人）**：
+
+```bash
+cd lib
+npm login
+npm publish     # 包名 dsh-feishu-reader（npm 上未被占用）
+```
+
+别人安装：把它加进 profile 的 `package.json`（`"dsh-feishu-reader": "^1.0.0"` + `dsh.profile.bundles` 加一行）→ `pnpm install` → 重启。若再提交到 DSH 社区市场目录（dshfind / dsh-1024store），用户就能在「设置 → 插件 → 社区市场」**一键搜索安装**。
+
+**③ 手动固化（可选）**：把 `lib/` 放到 `plugins/dsh-feishu-reader/`，再把 [`cordis-patch.snippet.yml`](cordis-patch.snippet.yml) 的 insert 段合并进 profile 的 `cordis.patch.yml`，重启即可；回滚 = 删掉那一段。
+
+> 三种正式方式跑的是**同一套引擎**（`lib/script.js`），只是安装通道不同。
 
 </details>
 
