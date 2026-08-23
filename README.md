@@ -139,18 +139,6 @@ node scripts/verify-boot.mjs   # 验证 profile bundle 层可被 DSH boot 解析
 
 **单一来源**：引擎逻辑只在 [`lib/script.js`](lib/script.js)，动态版由构建脚本生成。
 
-### 发布到 npm（维护者）
-
-使用者跳过这节。包已发布后，用户即可用 `dsh plugin add dsh-feishu-reader` 安装：
-
-```bash
-cd lib
-npm login     # 首次：npmjs.com 账号
-npm publish   # 发布 / 更新：先改 package.json 的 version 再发
-```
-
-发布内容由 `lib/package.json` 的 `files` 字段控制（含 `cordis.patch.yml`，`dsh.bundle` manifest 让它可被 `dsh plugin add` 识别）。
-
 ## 📄 License
 
 [MIT](LICENSE) · Made with 🚢 for the DSH / Feishu community
