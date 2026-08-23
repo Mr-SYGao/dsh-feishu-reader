@@ -130,9 +130,11 @@ Markdown 无法表达合并，插件把主单元格内容复制到覆盖位置�
 ## 🛠️ 开发 / Development
 
 ```bash
-npm run test           # 单元测试（node --test）
-npm run check          # 语法检查
-npm run build:dynamic  # 从 lib/ 重新生成 host.js / client.js
+npm run test                   # 单元测试（node --test）
+npm run check                  # 语法检查
+npm run build:dynamic          # 从 lib/ 重新生成 host.js / client.js
+node scripts/verify-client.mjs # 验证 client bundle 的 __ModuleLoader__ 注册协议
+node scripts/verify-boot.mjs   # 验证 profile bundle 层可被 DSH boot 解析（本机路径）
 ```
 
 **单一来源**：引擎逻辑只在 [`lib/script.js`](lib/script.js)，动态版由构建脚本生成。
