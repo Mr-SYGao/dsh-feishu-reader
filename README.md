@@ -35,32 +35,24 @@
 
 ## 🚀 安装
 
-> 用 DSH 官方命令一键安装，自动注册启动加载，**零手工步骤**。
+> 使用者**不需要** npm 账号，也不需要发布任何东西，二选一即可。
 
-**前置（只需一次，发布方）**：把包发布到 npm ——
-
-```bash
-cd lib
-npm login
-npm publish
-```
-
-**安装**（在 DSH 终端执行）：
+**方式一 · 官方命令**（包已发布到 npm 后）：
 
 ```bash
 dsh plugin --profile desktop add dsh-feishu-reader
 ```
 
-**重启 DSH 即生效**。以后更新：再跑一次同一条命令。
+自动注册启动加载，**重启 DSH 即生效**；以后更新再跑一次同一条命令。
 
-> 为什么不用手动配置？包的 `package.json` 声明了 `dsh.bundle` manifest（指向 `cordis.patch.yml`），`dsh plugin add` 会识别它并自动加进 profile 的 `dsh.profile.bundles`，DSH 启动时自动加载。
-
-**本地开发 / 发布前测试**（不需要 npm）：
+**方式二 · 本地安装**（包未发布 / 想先在自己机器上试，不需要 npm）：
 
 ```bash
-node scripts/install-local.mjs   # 一键安装到本地 profile
+node scripts/install-local.mjs   # 在仓库目录执行，一键装到本地 profile
 node scripts/uninstall-local.mjs # 卸载
 ```
+
+> 两种方式等价：包的 `package.json` 声明了 `dsh.bundle` manifest（指向 `cordis.patch.yml`），装好后 DSH 启动自动加载，`dsh plugin add` 也会自动识别它注册。
 
 ---
 
@@ -144,6 +136,18 @@ npm run build:dynamic  # 从 lib/ 重新生成 host.js / client.js
 ```
 
 **单一来源**：引擎逻辑只在 [`lib/script.js`](lib/script.js)，动态版由构建脚本生成。
+
+### 发布到 npm（维护者）
+
+使用者跳过这节。包已发布后，用户即可用 `dsh plugin add dsh-feishu-reader` 安装：
+
+```bash
+cd lib
+npm login     # 首次：npmjs.com 账号
+npm publish   # 发布 / 更新：先改 package.json 的 version 再发
+```
+
+发布内容由 `lib/package.json` 的 `files` 字段控制（含 `cordis.patch.yml`，`dsh.bundle` manifest 让它可被 `dsh plugin add` 识别）。
 
 ## 📄 License
 
