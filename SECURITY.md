@@ -2,25 +2,19 @@
 
 ## 报告漏洞
 
-如果你发现了 **dsh-feishu-reader** 的安全问题，**请不要在公开的 Issue 或 PR 中披露**，而是通过以下方式私下联系维护者：
+如果你发现 **dsh-feishu-reader** 的安全问题，请通过 GitHub 的**私有安全公告**（Security Advisory）报告 —— 漏洞细节不会公开，也无需提供联系方式：
 
-- **邮箱**：[chn.GaoJian@gmail.com](mailto:chn.GaoJian@gmail.com)
+- **报告入口**：https://github.com/Mr-SYGao/dsh-feishu-reader/security/advisories/new
+
+> 使用你的 GitHub 账号即可提交，报告会私密送达维护者。
 
 ## 报告内容
 
-请尽量包含以下信息（越多越有助于快速修复）：
-
 - 受影响版本（`npm view dsh-feishu-reader` 可查）
-- 问题的类型（如信息泄露、注入、越权等）
+- 问题类型（如信息泄露、注入、越权等）
 - 复现步骤
-- 影响范围（是否能被利用、危害多大）
-- 你建议的修复方向（可选）
-
-## 我们承诺
-
-- 收到报告后 **48 小时内**回复确认
-- 保持沟通、及时同步修复进展
-- 修复后会在发布说明中致谢（经你同意）
+- 影响范围（能否被利用、危害多大）
+- 建议修复方向（可选）
 
 ## 说明
 
