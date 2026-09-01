@@ -35,24 +35,11 @@
 
 ## 🚀 安装
 
-> 使用者**不需要** npm 账号，也不需要发布任何东西，二选一即可。
-
-**方式一 · 官方命令**（包已发布到 npm 后）：
-
 ```bash
 dsh plugin --profile desktop add dsh-feishu-reader
 ```
 
 自动注册启动加载，**重启 DSH 即生效**；以后更新再跑一次同一条命令。
-
-**方式二 · 本地安装**（包未发布 / 想先在自己机器上试，不需要 npm）：
-
-```bash
-node scripts/install-local.mjs   # 在仓库目录执行，一键装到本地 profile
-node scripts/uninstall-local.mjs # 卸载
-```
-
-> 两种方式等价：包的 `package.json` 声明了 `dsh.bundle` manifest（指向 `cordis.patch.yml`），装好后 DSH 启动自动加载，`dsh plugin add` 也会自动识别它注册。
 
 ---
 
