@@ -1,6 +1,6 @@
 {
   "name": "dsh-feishu-reader",
-  "version": "1.1.0",
+  "version": "1.1.1",
   "description": "DSH Cordis plugin: read Feishu (Lark) docs — text, tables & images — as Markdown for your AI. 读取飞书文档（docx/wiki/sheets/bitable），文字转 Markdown、表格还原、图片下载供 AI 读图。",
   "type": "module",
   "main": "./index.js",
