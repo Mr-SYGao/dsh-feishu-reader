@@ -50,7 +50,7 @@ check(`注册 id = "dsh-feishu-reader"（实际: ${registration ? JSON.stringify
 if (registration) {
   const exports = registration.factory((spec) => sandbox.require(spec))
   check('factory 可执行且导出 inject/apply', exports && Array.isArray(exports.inject) && typeof exports.apply === 'function')
-  check(`inject = ['slots','connection']（实际: ${JSON.stringify(exports && exports.inject)}）`, JSON.stringify(exports && exports.inject) === JSON.stringify(['slots', 'connection']))
+  check(`inject = ['slots','remote','remote.settings','remote.credentials']（实际: ${JSON.stringify(exports && exports.inject)}）`, JSON.stringify(exports && exports.inject) === JSON.stringify(['slots', 'remote', 'remote.settings', 'remote.credentials']))
   check('CSS 已注入（materialization 时）', styles.length === 1 && styles[0].includes('.feishu-card'))
   const ctx = { get: () => undefined }
   exports.apply(ctx) // 无 slots/connection 时应安全返回
