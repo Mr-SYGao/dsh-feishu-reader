@@ -9,6 +9,7 @@
 *Read Feishu (Lark) docs — text, tables & images — as Markdown for your AI*
 
 [![version](https://img.shields.io/badge/version-1.1.2-3370ff?style=flat-square)](https://github.com/Mr-SYGao/dsh-feishu-reader)
+[![CI](https://github.com/Mr-SYGao/dsh-feishu-reader/actions/workflows/ci.yml/badge.svg)](https://github.com/Mr-SYGao/dsh-feishu-reader/actions/workflows/ci.yml)
 [![license](https://img.shields.io/badge/license-MIT-green?style=flat-square)](LICENSE)
 [![node](https://img.shields.io/badge/node-%3E%3D18-339933?style=flat-square)](package.json)
 [![tests](https://img.shields.io/badge/tests-12%20passed-37c96b?style=flat-square)](#-开发)
